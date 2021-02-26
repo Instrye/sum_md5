@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 )
 
 var file = flag.Bool("f", false, "是否是文件")
@@ -15,6 +16,7 @@ var file = flag.Bool("f", false, "是否是文件")
 func main() {
 	flag.Parse()
 	str := flag.Arg(0)
+	startTime := time.Now()
 	hash := md5.New()
 	if *file {
 		files, err := os.Open(str)
@@ -39,6 +41,8 @@ func main() {
 		io.WriteString(hash, str)
 	}
 	md5Hash := hash.Sum(nil)
+	endTime := time.Since(startTime)
 	fmt.Printf("32 : %s\r\n", hex.EncodeToString(md5Hash))
 	fmt.Printf("16 : %s\r\n", hex.EncodeToString(md5Hash[4:12]))
+	fmt.Printf("run time : %s", endTime	)
 }
